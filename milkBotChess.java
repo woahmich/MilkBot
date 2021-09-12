@@ -71,19 +71,70 @@ public class milkBotChess {
 		String list="";
 		return list; 
 	}
+	
 	public static String possibleR(int i) {
 		String list="";
 		return list; 
-	}public static String possibleK(int i) {
+	}
+	
+	public static String possibleK(int i) {
 		String list="";
 		return list; 
-	}public static String possibleB(int i) {
+	}
+	
+	public static String possibleB(int i) {
 		String list="";
 		return list; 
-	}public static String possibleQ(int i) {
-		String list="";
+	}
+	
+	public static String possibleQ(int i) {
+		String list="", oldPiece;
+		int r=i/8, c=i%8;
+		int temp=1;
+		for(int j=-1; j<=1; j++) {
+			for(int k=-1; k<=1; k++) {
+				try {
+					while(" ".equals(chessBoard[r+temp*j][c+temp*k])) {
+						oldPiece=chessBoard[r+temp*j][c+temp*k];
+						// sets queens original position to empty
+						chessBoard[r][c]=" ";
+						// updates new position to a queen
+						chessBoard[r+temp*j][c+temp*k]="Q";
+						// check if king is in check
+						if(kingSafe()) {
+							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+						}
+						// reset queen's position
+						chessBoard[r][c]="Q";
+						// reset other position
+						chessBoard[r+temp*j][c+temp*k]=oldPiece;
+						temp++;
+					}
+					// check if piece can get captured
+					if(Character.isLowerCase(chessBoard[r+temp*j][c+temp*k].charAt(0))) {
+						oldPiece=chessBoard[r+temp*j][c+temp*k];
+						// sets queens original position to empty
+						chessBoard[r][c]=" ";
+						// updates new position to a queen
+						chessBoard[r+temp*j][c+temp*k]="Q";
+						// check if king is in check
+						if(kingSafe()) {
+							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+						}
+						// reset queen's position
+						chessBoard[r][c]="Q";
+						// reset other position
+						chessBoard[r+temp*j][c+temp*k]=oldPiece;
+					}
+				}
+				catch (Exception e) {}
+				temp = 1;
+			}
+		}
 		return list; 
-	}public static String possibleA(int i) {
+	}
+	
+	public static String possibleA(int i) {
 		
 		String list="", oldPiece;
 		int r=i/8, c=i%8;
