@@ -73,7 +73,79 @@ public class milkBotChess {
 	}
 	
 	public static String possibleR(int i) {
-		String list="";
+		String list="", oldPiece;
+		int r=i/8, c=i%8;
+		int temp = 1;
+		for (int j= -1; j<=1; j+=2) {
+			// check vertical
+			try {
+				while(" ".equals(chessBoard[r][c+temp*j])) {
+					oldPiece=chessBoard[r][c+temp*j];
+					// set former position to blank
+					chessBoard[r][c]=" ";
+					// set new position to rook
+					chessBoard[r][c+temp*j]="R";
+					// check if king is in check
+					if(kingSafe()) {
+						list=list+r+c+r+(c+temp*j) + oldPiece;
+					}
+					// reset positions
+					chessBoard[r][c]="R";
+					chessBoard[r][c+temp*j]=" ";
+					temp++;
+				}
+				if(Character.isLowerCase(chessBoard[r][c+temp*j].charAt(0))) {
+					oldPiece=chessBoard[r][c+temp*j];
+					// set former position to blank
+					chessBoard[r][c]=" ";
+					// set new position to rook
+					chessBoard[r][c+temp*j]="R";
+					// check if king is in check
+					if(kingSafe()) {
+						list=list+r+c+r+(c+temp*j) + oldPiece;
+					}
+					// reset positions
+					chessBoard[r][c]="R";
+					chessBoard[r][c+temp*j]=" ";
+				}
+			}
+			catch (Exception e) {}
+			temp=1;
+			// check horizontal
+			try {
+				while(" ".equals(chessBoard[r+temp*j][c])) {
+					oldPiece=chessBoard[r+temp*j][c];
+					// set former position to blank
+					chessBoard[r][c]=" ";
+					// set new position to rook
+					chessBoard[r+temp*j][c]="R";
+					// check if king is in check
+					if(kingSafe()) {
+						list=list+r+c+(r+temp*j)+c + oldPiece;
+					}
+					// reset positions
+					chessBoard[r][c]="R";
+					chessBoard[r+temp*j][c]=" ";
+					temp++;
+				}
+				if(Character.isLowerCase(chessBoard[r+temp*j][c].charAt(0))) {
+					oldPiece=chessBoard[r+temp*j][c];
+					// set former position to blank
+					chessBoard[r][c]=" ";
+					// set new position to rook
+					chessBoard[r+temp*j][c]="R";
+					// check if king is in check
+					if(kingSafe()) {
+						list=list+r+c+(r+temp*j)+c + oldPiece;
+					}
+					// reset positions
+					chessBoard[r][c]="R";
+					chessBoard[r+temp*j][c]=" ";
+				}
+			}
+			catch (Exception e) {}
+			temp=1;
+		}
 		return list; 
 	}
 	
@@ -83,7 +155,52 @@ public class milkBotChess {
 	}
 	
 	public static String possibleB(int i) {
-		String list="";
+		// almost the exact same as queen with a couple tweaks
+		String list="", oldPiece;
+		int r=i/8, c=i%8;
+		int temp=1;
+		// += 2 instead of ++ because it makes sure j and k don't become 0
+		// because 0 means horizontal movement
+		for(int j=-1; j<=1; j+=2) {
+			for(int k=-1; k<=1; k+=2) {
+				try {
+					while(" ".equals(chessBoard[r+temp*j][c+temp*k])) {
+						oldPiece=chessBoard[r+temp*j][c+temp*k];
+						// sets bishops original position to empty
+						chessBoard[r][c]=" ";
+						// updates new position to a bishop
+						chessBoard[r+temp*j][c+temp*k]="B";
+						// check if king is in check
+						if(kingSafe()) {
+							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+						}
+						// reset bishop's position
+						chessBoard[r][c]="B";
+						// reset other position
+						chessBoard[r+temp*j][c+temp*k]=oldPiece;
+						temp++;
+					}
+					// check if piece can get captured
+					if(Character.isLowerCase(chessBoard[r+temp*j][c+temp*k].charAt(0))) {
+						oldPiece=chessBoard[r+temp*j][c+temp*k];
+						// sets bishop's original position to empty
+						chessBoard[r][c]=" ";
+						// updates new position to a bishop
+						chessBoard[r+temp*j][c+temp*k]="B";
+						// check if king is in check
+						if(kingSafe()) {
+							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+						}
+						// reset bishop's position
+						chessBoard[r][c]="B";
+						// reset other position
+						chessBoard[r+temp*j][c+temp*k]=oldPiece;
+					}
+				}
+				catch (Exception e) {}
+				temp = 1;
+			}
+		}
 		return list; 
 	}
 	
@@ -93,42 +210,44 @@ public class milkBotChess {
 		int temp=1;
 		for(int j=-1; j<=1; j++) {
 			for(int k=-1; k<=1; k++) {
-				try {
-					while(" ".equals(chessBoard[r+temp*j][c+temp*k])) {
-						oldPiece=chessBoard[r+temp*j][c+temp*k];
-						// sets queens original position to empty
-						chessBoard[r][c]=" ";
-						// updates new position to a queen
-						chessBoard[r+temp*j][c+temp*k]="Q";
-						// check if king is in check
-						if(kingSafe()) {
-							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+				if(j!=0 || k!=0) {
+					try {
+						while(" ".equals(chessBoard[r+temp*j][c+temp*k])) {
+							oldPiece=chessBoard[r+temp*j][c+temp*k];
+							// sets queens original position to empty
+							chessBoard[r][c]=" ";
+							// updates new position to a queen
+							chessBoard[r+temp*j][c+temp*k]="Q";
+							// check if king is in check
+							if(kingSafe()) {
+								list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+							}
+							// reset queen's position
+							chessBoard[r][c]="Q";
+							// reset other position
+							chessBoard[r+temp*j][c+temp*k]=oldPiece;
+							temp++;
 						}
-						// reset queen's position
-						chessBoard[r][c]="Q";
-						// reset other position
-						chessBoard[r+temp*j][c+temp*k]=oldPiece;
-						temp++;
-					}
-					// check if piece can get captured
-					if(Character.isLowerCase(chessBoard[r+temp*j][c+temp*k].charAt(0))) {
-						oldPiece=chessBoard[r+temp*j][c+temp*k];
-						// sets queens original position to empty
-						chessBoard[r][c]=" ";
-						// updates new position to a queen
-						chessBoard[r+temp*j][c+temp*k]="Q";
-						// check if king is in check
-						if(kingSafe()) {
-							list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+						// check if piece can get captured
+						if(Character.isLowerCase(chessBoard[r+temp*j][c+temp*k].charAt(0))) {
+							oldPiece=chessBoard[r+temp*j][c+temp*k];
+							// sets queens original position to empty
+							chessBoard[r][c]=" ";
+							// updates new position to a queen
+							chessBoard[r+temp*j][c+temp*k]="Q";
+							// check if king is in check
+							if(kingSafe()) {
+								list=list+r+c+(r+temp*j)+(c+temp*k) + oldPiece;
+							}
+							// reset queen's position
+							chessBoard[r][c]="Q";
+							// reset other position
+							chessBoard[r+temp*j][c+temp*k]=oldPiece;
 						}
-						// reset queen's position
-						chessBoard[r][c]="Q";
-						// reset other position
-						chessBoard[r+temp*j][c+temp*k]=oldPiece;
 					}
+					catch (Exception e) {}
+					temp = 1;
 				}
-				catch (Exception e) {}
-				temp = 1;
 			}
 		}
 		return list; 
