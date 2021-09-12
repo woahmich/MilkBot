@@ -1,4 +1,4 @@
 
-public interface userInterface {
+public class userInterface {
 
 }
