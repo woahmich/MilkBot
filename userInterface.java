@@ -15,6 +15,12 @@ public class userInterface extends JPanel implements MouseListener, MouseMotionL
 		g.fillRect(x-20, y-20, 40, 40);
 		g.setColor(new Color(190, 81, 215));
 		g.fillRect(40,  20, 80, 50);
+		g.drawString("MilkBot", x, y);
+		
+		// create image for the pieces and links it to saved picture
+		Image chessPieceImage;
+		chessPieceImage = new ImageIcon("ChessPieces.png").getImage();
+		g.drawImage(chessPieceImage, x, 0, x+120, y+100, 100, x, x+100, 100, this);
 		
 	}
 	// must call all of these MouseListeners as blanks if not used to clear userInterface warning
