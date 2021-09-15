@@ -13,15 +13,19 @@ public class milkBotChess {
 					{"r","k","b","q","a","b","k","r"},
 			        {"p","p","p","p","p","p","p","p"},
 			        {" "," "," "," "," "," "," "," "},
+			        {" "," "," "," "," "," ","b"," "},
 			        {" "," "," "," "," "," "," "," "},
-			        {" "," "," "," "," "," "," "," "},
-			        {" "," "," "," "," "," "," "," "},
+			        {" "," "," "," ","A"," "," "," "},
 			        {"P","P","P","P","P","P","P","P"},
-			        {"R","K","B","Q","A","B","K","R"}};
+			        {"R","K","B","Q"," ","B","K","R"}};
 	
+	// C is for capitol and L is for lower case
 	static int kingPositionC, kingPositionL;
 
 	public static void main(String[] args) {
+		// searches for king's position and updates it
+		while(!"A".equals(chessBoard[kingPositionC/8][kingPositionC%8])) {kingPositionC++;}
+		while(!"a".equals(chessBoard[kingPositionL/8][kingPositionL%8])) {kingPositionL++;}
 		
 		
 		
@@ -155,7 +159,6 @@ public class milkBotChess {
         for (int j=-1; j<=1; j+=2) {
             for (int k=-1; k<=1; k+=2) {
                 try {
-                	// *2 creates L shape
                     if (Character.isLowerCase(chessBoard[r+j][c+k*2].charAt(0)) || " ".equals(chessBoard[r+j][c+k*2])) {
                         oldPiece=chessBoard[r+j][c+k*2];
                         chessBoard[r][c]=" ";
@@ -351,6 +354,42 @@ public class milkBotChess {
 	
 	// method to check if King is in check
 	public static boolean kingSafe() {
+		// bishop and queen diagonal
+		int temp=1;
+		for(int j=-1; j<=1; j+=2) {
+			for(int k=-1; k<=1; k+=2) {
+				try {
+					while(" ".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8+temp*k])) {temp++;} 
+					if("b".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8+temp*k]) || ("q".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8+temp*k]))){
+						return false;
+					}
+				}
+				catch (Exception e) {}
+				temp = 1;
+			}
+		}
+		
+		// rook and queen horizontal/vertical
+		temp=1;
+		for(int j=-1; j<=1; j+=2) {
+			try {
+				while(" ".equals(chessBoard[kingPositionC/8][kingPositionC%8+temp*j])) {temp++;} 
+				if("r".equals(chessBoard[kingPositionC/8][kingPositionC%8+temp*j]) || ("q".equals(chessBoard[kingPositionC/8][kingPositionC%8+temp*j]))){
+					return false;
+				}
+			}
+			catch (Exception e) {}
+			temp = 1;
+			
+			try {
+				while(" ".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8])) {temp++;} 
+				if("r".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8]) || ("q".equals(chessBoard[kingPositionC/8+temp*j][kingPositionC%8]))){
+					return false;
+				}
+			}
+			catch (Exception e) {}
+			temp = 1;
+		}
 		return true;
 	}
 	
